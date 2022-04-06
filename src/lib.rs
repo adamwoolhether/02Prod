@@ -1,18 +1,19 @@
-use actix_web::{web, App, HttpRequest, HttpResponse, HttpServer, Responder};
+use actix_web::{web, App, HttpResponse, HttpServer};
+use actix_web::dev::Server;
 
-async fn health_check() -> impl Responder {
-    HttpResponse::Ok()
+async fn health_check() -> HttpResponse {
+    HttpResponse::Ok().finish()
 }
 
-/// Mark `run` as public.
-/// No longer being a binary entrypoint, we can mark it
-/// as async without having ot use any proc-marco incantation.
-pub async fn run() -> std::io::Result<()> {
-    HttpServer::new(|| {
+/// We drop the `async` keyword and return `Server`
+/// on the happy path without calling `await`,
+pub fn run() -> Result<Server, std::io::Error> {
+    let server = HttpServer::new(||{
         App::new()
             .route("/health_check", web::get().to(health_check))
     })
         .bind("127.0.0.1:8000")?
-        .run()
-        .await
+        .run();
+    /// Remove .await
+    Ok(server)
 }
