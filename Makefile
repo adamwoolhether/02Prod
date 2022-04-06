@@ -21,3 +21,8 @@ ci:
 	cargo clippy -- -D warnings
 	cargo fmt -- --check
 	cargo audit
+
+watch:
+	cargo watch -x check -x test -x run
+format:
+	cargo fmt -- --check
