@@ -17,7 +17,7 @@ shell := $(shell echo ${SHELL})
 # cargo install cargo-audit
 ci:
 	cargo test
-	cargo tarpaulin --ignore-tests
+	@#cargo tarpaulin --ignore-tests
 	cargo clippy -- -D warnings
 	cargo fmt -- --check
-	cargo audi
+	cargo audit
