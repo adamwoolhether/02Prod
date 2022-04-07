@@ -38,15 +38,13 @@ async fn subscribe_returns_a_200_for_valid_form_data() {
     let app_address = spawn_app();
     let configuration = get_configuration().expect("Failed to read configuration");
     let connection_string = configuration.database.connection_string();
-    /// The `Connection` trail MUST be in scope for to invoke
-    /// `PgConnection:connect` - it's not an inherent method of the struct.
-    let connection = PgConnection::connect(&connection_string)
+    let mut connection = PgConnection::connect(&connection_string)
         .await
         .expect("Failed to connect to Postgres.");
     let client = reqwest::Client::new();
+    let body = "name=adam%20wade&email=adamwade@gmail.com";
 
     // Act
-    let body = "name=adam%20wade&email=adamwade@gmail.com";
     let response = client
         .post(&format!("{}/subscriptions", &app_address))
         .header("Content-Type", "application/x-www-form-urlencoded")
@@ -57,6 +55,14 @@ async fn subscribe_returns_a_200_for_valid_form_data() {
 
     // Assert
     assert_eq!(200, response.status().as_u16());
+
+    let saved = sqlx::query!("SELECT email, name FROM subscriptions",)
+        .fetch_one(&mut connection)
+        .await
+        .expect("Failed to fetch saved subscription.");
+
+    assert_eq!(saved.email, "adamwade@gmail.com");
+    assert_eq!(saved.name, "adam wade");
 }
 
 #[tokio::test]
