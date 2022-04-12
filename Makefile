@@ -11,6 +11,12 @@ shell := $(shell echo ${SHELL})
 
 # RUST_LOG=trace
 
+####################################################################
+# TEST
+####################################################################
+sub:
+	curl -i -X POST -d 'email=thomas_mann@hotmail.com&name=Tom' http://127.0.0.1:8000/subscriptions
+
 db-migrate:
 	SKIP_DOCKER=true scripts/init_db.sh
 db-init:
