@@ -25,11 +25,13 @@ pub async fn subscribe(form: web::Form<FormData>, pool: web::Data<PgPool>) -> Ht
     )
     // Use `get_ref` to get an immutable reference to the
     // `PgConnection` wrapped by `web::Data`.
-    .execute(pool.get_ref())
+    .execute(pool.as_ref())
     .await
     {
         Ok(_) => HttpResponse::Ok().finish(),
         Err(e) => {
+            // User `println!` to capture information about the
+            // error in case things didn't work as expected.
             println!("Failed to execute query: {}", e);
             HttpResponse::InternalServerError().finish()
         }
