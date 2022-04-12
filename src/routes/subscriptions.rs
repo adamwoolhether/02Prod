@@ -2,6 +2,7 @@ use actix_web::{web, HttpResponse};
 use chrono::Utc;
 use sqlx::PgPool;
 use uuid::Uuid;
+use tracing::Instrument;
 
 
 #[derive(serde::Deserialize)]
@@ -12,20 +13,19 @@ pub struct FormData {
 
 pub async fn subscribe(form: web::Form<FormData>, pool: web::Data<PgPool>) -> HttpResponse {
     let request_id = Uuid::new_v4();
-    // Spans also have an associated level like logs.
-    // `info_span` creates a span at the info-level.
     let request_span = tracing::info_span!(
         "Adding a new subscriber.",
         %request_id,
         subscriber_email = %form.email,
         subscriber_name = %form.name,
     );
-    // Don't use the following `enter` in an async func!
     let _request_span_guard = request_span.enter();
 
-    tracing::info!(
-        "request_id {} - Saving new subscriber details in the database",
-        request_id
+    // Don't call `.enter` on a query_span!
+    // `.instrument` handles it at the right
+    // time in the query's future.
+    let query_span = tracing::info_span!(
+        "Saving new subscriber details in the database"
     );
     match sqlx::query!(
         r#"
@@ -35,24 +35,19 @@ pub async fn subscribe(form: web::Form<FormData>, pool: web::Data<PgPool>) -> Ht
         Uuid::new_v4(),
         form.email,
         form.name,
-        Utc::now()
-    )
-    .execute(pool.as_ref())
-    .await
+        Utc::now())
+        .execute(pool.as_ref())
+        // Attach the instrumentation and `.await` it.
+        .instrument(query_span)
+        .await
     {
         Ok(_) => {
-            tracing::info!(
-                "request_id {} - New subscriber details have been saved",
-            request_id
-            );
             HttpResponse::Ok().finish()
         },
         Err(e) => {
-            tracing::error!(
-                "request_id {} - Failed to execute query: {:?}",
-                request_id,
-                e
-            );
+            // The error log is currently falling out of `query_span`,
+            // this will be fixed later.
+            tracing::error!("Failed to execute query: {:?}",e);
             HttpResponse::InternalServerError().finish()
         }
     }
