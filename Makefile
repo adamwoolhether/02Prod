@@ -9,6 +9,8 @@ shell := $(shell echo ${SHELL})
 # cargo watch -x check
 # cargo watch -x check -x test -x run
 
+# RUST_LOG=trace
+
 db-migrate:
 	SKIP_DOCKER=true scripts/init_db.sh
 db-init:
