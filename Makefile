@@ -22,12 +22,16 @@ db-init:
 	scripts/init_db.sh
 
 ####################################################################
-# DEPS
+# DEV
 ####################################################################
 # cargo install cargo-udeps
 
 udeps:
 	cargo +nightly udeps
+
+test-verbose:
+	TEST_LOG=true cargo test health_check_works
+
 
 ####################################################################
 # CI
