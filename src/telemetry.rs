@@ -1,9 +1,9 @@
-use tracing::Subscriber;
 use tracing::subscriber::set_global_default;
+use tracing::Subscriber;
 use tracing_bunyan_formatter::{BunyanFormattingLayer, JsonStorageLayer};
 use tracing_log::LogTracer;
-use tracing_subscriber::{layer::SubscriberExt, EnvFilter, Registry};
 use tracing_subscriber::fmt::MakeWriter;
+use tracing_subscriber::{layer::SubscriberExt, EnvFilter, Registry};
 
 /// Compse multiple layers into a `tracing`'s subscriber.
 ///
@@ -14,16 +14,20 @@ use tracing_subscriber::fmt::MakeWriter;
 /// We explicitly call out that the returned subscriber is
 /// `Send` and `Sync`, making it possible to pass it to
 /// `init_subscriber`.
-pub fn get_subscriber<Sink>(name: String, env_filter: String, sink: Sink) -> impl Subscriber + Send + Sync
-    where
-        // This syntax is a higher-ranked trait bound (HRTB)
-        // It allows Sink to implement the `MakeWriter`
-        // trait for all choices of the lifetime parameter `'a'`.
-        // see https://doc.rust-lang.org/noicron/hrtb.html
-        Sink: for<'a> MakeWriter<'a> + Send + Sync + 'static,
+pub fn get_subscriber<Sink>(
+    name: String,
+    env_filter: String,
+    sink: Sink,
+) -> impl Subscriber + Send + Sync
+where
+    // This syntax is a higher-ranked trait bound (HRTB)
+    // It allows Sink to implement the `MakeWriter`
+    // trait for all choices of the lifetime parameter `'a'`.
+    // see https://doc.rust-lang.org/noicron/hrtb.html
+    Sink: for<'a> MakeWriter<'a> + Send + Sync + 'static,
 {
-    let env_filter = EnvFilter::try_from_default_env()
-        .unwrap_or_else(|_| EnvFilter::new(env_filter));
+    let env_filter =
+        EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new(env_filter));
     let formatting_layer = BunyanFormattingLayer::new(name, sink);
     Registry::default()
         .with(env_filter)
