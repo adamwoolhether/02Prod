@@ -5,23 +5,29 @@ shell := $(shell echo ${SHELL})
 # rustup toolchain install nightly --allow-downgrade
 # cargo install --version=0.5.7 sqlx-cli --no-default-features --features postgres
 
-
 # cargo watch -x check
 # cargo watch -x check -x test -x run
 
 # RUST_LOG=trace
 
-####################################################################
-# TEST
-####################################################################
 sub:
 	curl -i -X POST -d 'email=thomas_mann@hotmail.com&name=Tom' http://127.0.0.1:8000/subscriptions
 
+####################################################################
+# DB
+####################################################################
 db-migrate:
 	SKIP_DOCKER=true scripts/init_db.sh
 db-init:
 	scripts/init_db.sh
 
+####################################################################
+# DEPS
+####################################################################
+# cargo install cargo-udeps
+
+udeps:
+	cargo +nightly udeps
 
 ####################################################################
 # CI
