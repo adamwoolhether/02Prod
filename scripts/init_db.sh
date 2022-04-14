@@ -1,6 +1,24 @@
 #!/usr/bin/env zsh
-set -x
+#set -x
 set -eo pipefail
+
+function startDocker () {
+  while (! docker stats --no-stream &> /dev/null); do
+    printf "."
+    sleep 1
+    done
+    printf "\n"
+}
+
+
+function checkDocker() {
+  if ! pgrep -x "docker" > /dev/null
+  then
+    printf "Starting docker"
+    open /Applications/Docker.app
+    startDocker
+    fi
+}
 
 if ! [ -x "$(command -v psql)" ]; then
   echo >&2 "Error: psql is not installed."
@@ -21,6 +39,8 @@ DB_PORT="${POSTGRES_PORT:=5432}"
 
 if [[ -z "${SKIP_DOCKER}" ]]
 then
+checkDocker
+
 docker run \
   -e DB_USER=${DB_USER} \
   -e POSTGRES_PASSWORD=${DB_PASSWORD} \
@@ -32,8 +52,9 @@ fi
 
 # Ping Postgres until it's ready to accempt commands.
 export PGPASSWORD=${DB_PASSWORD}
-until psql -h "localhost" -U "${DB_USER}" -p "${DB_PORT}" -d "postgres" -c '\q'; do
-  >&2 echo "Postgres is still unavailable - sleeping"
+printf "Postgres is unavailable - sleeping"
+until psql -h "localhost" -U "${DB_USER}" -p "${DB_PORT}" -d "postgres" -c '\q' &> /dev/null ; do
+  printf "."
   sleep 1
 done
 
