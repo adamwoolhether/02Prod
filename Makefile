@@ -20,6 +20,9 @@ db-migrate:
 	SKIP_DOCKER=true scripts/init_db.sh
 db-init:
 	scripts/init_db.sh
+db-down:
+	docker stop zero2prod_dev
+	docker rm zero2prod_dev
 
 ####################################################################
 # DEV

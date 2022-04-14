@@ -41,7 +41,7 @@ if [[ -z "${SKIP_DOCKER}" ]]
 then
 checkDocker
 
-docker run \
+docker run --name zero2prod_dev \
   -e DB_USER=${DB_USER} \
   -e POSTGRES_PASSWORD=${DB_PASSWORD} \
   -e POSTGRES_DB=${DB_NAME} \
