@@ -46,8 +46,12 @@ build:
 docker-run:
 	docker run --rm -p 8000:8000 zero2prod | jq
 
+# doctl apps list
+# doctl app update APP-ID --spec=spec.yaml
 deploy:
 	doctl apps create --spec spec.yaml
+deploy-update:
+	doctl app update $$(doctl apps list | grep zero2prod | cut -f 1 -d ' ') --spec=spec.yaml
 
 ####################################################################
 # CI
