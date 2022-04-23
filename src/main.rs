@@ -15,6 +15,7 @@ async fn main() -> std::io::Result<()> {
         .connect_timeout(std::time::Duration::from_secs(2))
         .connect_lazy(&configuration.database.connection_string().expose_secret())
         .expect("Failed to connect to Postgres");
+
     let address = format!(
         "{}:{}",
         configuration.application.host, configuration.application.port

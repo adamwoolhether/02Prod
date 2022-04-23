@@ -44,7 +44,7 @@ build:
 	docker build --tag zero2prod --file Dockerfile .
 
 docker-run:
-	docker run --rm -p 8000:8000 zero2prod
+	docker run --rm -p 8000:8000 zero2prod | jq
 
 ####################################################################
 # CI
