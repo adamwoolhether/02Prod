@@ -4,7 +4,13 @@ use secrecy::Secret;
 #[derive(serde::Deserialize)]
 pub struct Settings {
     pub database: DatabaseSettings,
-    pub application_port: u16,
+    pub application: ApplicationSettings,
+}
+
+#[derive(serde::Deserialize)]
+pub struct ApplicationSettings {
+    pub port: u16,
+    pub host: String,
 }
 
 #[derive(serde::Deserialize)]
@@ -17,7 +23,6 @@ pub struct DatabaseSettings {
 }
 
 pub fn get_configuration() -> Result<Settings, config::ConfigError> {
-    // Initialize config reader.
     let mut settings = config::Config::default();
 
     settings.merge(config::File::with_name("configuration"))?;
