@@ -40,10 +40,11 @@ test-verbose:
 ####################################################################
 build:
 	#cargo sqlx prepare -- --lib
+	cargo check
 	docker build --tag zero2prod --file Dockerfile .
 
 docker-run:
-	docker run -r -p 8000:8000 zero2prod
+	docker run --rm -p 8000:8000 zero2prod
 
 ####################################################################
 # CI
