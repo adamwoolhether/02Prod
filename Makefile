@@ -5,6 +5,11 @@ shell := $(shell echo ${SHELL})
 # rustup toolchain install nightly --allow-downgrade
 # cargo install --version=0.5.7 sqlx-cli --no-default-features --features postgres
 
+# curl --request POST \
+#    --data 'name=le%20guin&email=ursula_le_guin%40gmail.com' \
+#    https://zero2prod-xqqlo.ondigitalocean.app/subscriptions \
+#    --verbose
+
 # cargo watch -x check
 # cargo watch -x check -x test -x run
 
@@ -48,6 +53,7 @@ docker-run:
 
 # doctl apps list
 # doctl app update APP-ID --spec=spec.yaml
+# DATABASE_URL=DIGITAL-OCEAN-DB-CONN-STRING sqlx migrate run
 deploy:
 	doctl apps create --spec spec.yaml
 deploy-update:
