@@ -11,8 +11,8 @@ pub struct SubscriberName(String);
 // Ensures all instances of SubscriberName satisfy validation constrains.
 impl SubscriberName {
     // Returns an instance of `SubscriberName` if the input satisfies
-    // all validation constraints on subscriber names, panics otherwise.
-    pub fn parse(s: String) -> SubscriberName {
+    // all validation constraints on subscriber names, or an error message otherwise.
+    pub fn parse(s: String) -> Result<SubscriberName, String> {
         // `.trim()` returns a view over input `s` without
         // trailing whitespace-like characters.
         // `.is_empty()` checks if the view contains any character.
@@ -33,7 +33,7 @@ impl SubscriberName {
         if is_empty_or_whitespace || is_too_long || contains_forbidden_characters {
             panic!("{} is not a valid subscriber name.", s)
         } else {
-            Self(s)
+            Ok(Self(s))
         }
     }
 }
