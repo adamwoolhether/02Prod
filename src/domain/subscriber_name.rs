@@ -1,10 +1,5 @@
 use unicode_segmentation::UnicodeSegmentation;
 
-pub struct NewSubscriber {
-    pub email: String,
-    pub name: SubscriberName,
-}
-
 // Implement debug trait to satisfy our use of `claim`.
 #[derive(Debug)]
 // SubscriberName is a tuple struct with a single, unnamed field of type String.

@@ -172,7 +172,7 @@ async fn subscribe_returns_a_400_when_fields_are_present_but_invalid() {
         assert_eq!(
             400,
             response.status().as_u16(),
-            "The API didn't return a 400 Bad Request when the payload was{}.",
+            "The API didn't return a 400 Bad Request when the payload was {}.",
             description
         );
     }
