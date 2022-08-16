@@ -1,4 +1,3 @@
-use secrecy::Secret;
 use sqlx::postgres::PgPoolOptions;
 use std::net::TcpListener;
 use zero2prod::configuration::get_configuration;

@@ -40,7 +40,7 @@ impl EmailClient {
             html_body: html_content.to_owned(),
             text_body: text_content.to_owned(),
         };
-        let builder = self
+        let _builder = self
             .http_client
             .post(&url)
             .header(
