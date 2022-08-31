@@ -14,7 +14,6 @@ shell := $(shell echo ${SHELL})
 # cargo watch -x check -x test -x run
 
 # RUST_LOG=trace
-
 sub:
 	curl -i -X POST -d 'email=thomas_mann@hotmail.com&name=Tom' http://127.0.0.1:8000/subscriptions
 
@@ -73,7 +72,7 @@ ci:
 	@#cargo tarpaulin --ignore-tests
 	cargo clippy -- -D warnings
 	cargo fmt -- --check
-	cargo audit
+	cargo audit --ignore RUSTSEC-2020-0071
 
 watch:
 	cargo watch -x check -x test -x run
