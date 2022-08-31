@@ -28,6 +28,8 @@ db-init:
 db-down:
 	docker stop zero2prod_dev
 	docker rm zero2prod_dev
+pgcli:
+	pgcli postgres://postgres:password@localhost/newsletter
 
 ####################################################################
 # DEV
