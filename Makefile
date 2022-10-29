@@ -55,7 +55,7 @@ docker-run:
 	docker run --rm -p 8000:8000 zero2prod | jq
 
 # doctl apps list
-# doctl app update APP-ID --spec=spec.yaml
+# doctl app update {APP-ID} --spec=spec.yaml
 # DATABASE_URL=DIGITAL-OCEAN-DB-CONN-STRING sqlx migrate run
 deploy:
 	doctl apps create --spec spec.yaml
