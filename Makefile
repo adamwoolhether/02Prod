@@ -14,6 +14,8 @@ shell := $(shell echo ${SHELL})
 # cargo watch -x check -x test -x run
 
 # RUST_LOG=trace
+# ulimit -n 1024
+
 sub:
 	curl -i -X POST -d 'email=thomas_mann@hotmail.com&name=Tom' http://127.0.0.1:8000/subscriptions
 
