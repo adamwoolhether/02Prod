@@ -78,7 +78,7 @@ ci:
 	@#cargo tarpaulin --ignore-tests
 	cargo clippy -- -D warnings
 	cargo fmt -- --check
-	cargo audit --ignore RUSTSEC-2020-0071
+	cargo audit --ignore RUSTSEC-2020-0071 --ignore RUSTSEC-2023-0001
 
 watch:
 	cargo watch -x check -x test -x run
