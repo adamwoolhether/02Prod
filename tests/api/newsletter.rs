@@ -43,13 +43,14 @@ async fn create_unconfirmed_subscriber(app: &TestApp) -> ConfirmationLinks {
         .expect(1)
         .mount_as_scoped(&app.email_server)
         .await;
+
     app.post_subscriptions(body.into())
         .await
         .error_for_status()
         .unwrap();
 
-    // Insepct the reuqests recieved by the mock Postmark server
-    // to retrive confirmation link and return it.
+    // We now inspect the requests received by the mock Postmark server
+    // to retrieve the confirmation link and return it
     let email_request = &app
         .email_server
         .received_requests()
@@ -75,6 +76,7 @@ async fn newsletters_are_delivered_to_confirmed_subscribers() {
     // Arrange
     let app = spawn_app().await;
     create_confirmed_subscriber(&app).await;
+
     Mock::given(path("/email"))
         .and(method("POST"))
         .respond_with(ResponseTemplate::new(200))

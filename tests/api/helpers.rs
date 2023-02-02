@@ -73,7 +73,7 @@ impl TestApp {
             .json(&body)
             .send()
             .await
-            .expect("Failed to execute request")
+            .expect("Failed to execute request.")
     }
 }
 
