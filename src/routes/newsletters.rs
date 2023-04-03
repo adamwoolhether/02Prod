@@ -61,6 +61,7 @@ struct ConfirmedSubscriber {
     email: SubscriberEmail,
 }
 
+#[tracing::instrument(name = "Get confirmed subscribers", skip(pool))]
 async fn get_confirmed_subscribers(
     pool: &PgPool,
 ) -> Result<Vec<Result<ConfirmedSubscriber, anyhow::Error>>, anyhow::Error> {
@@ -83,43 +84,6 @@ async fn get_confirmed_subscribers(
 
     Ok(confirmed_subscribers)
 }
-
-// #[tracing::instrument(name = "Get confirmed subscribers", skip(pool))]
-// async fn get_confirmed_subscribers(
-//     pool: &PgPool,
-// ) -> Result<Vec<ConfirmedSubscriber>, anyhow::Error> {
-//     struct Row {
-//         email: String,
-//     }
-//
-//     // query_as will map retrieved rows to the type specified as its first arg
-//     let rows = sqlx::query_as!(
-//         Row,
-//         r#"
-//         SELECT email
-//         FROM subscriptions
-//         WHERE status = 'confirmed'
-//         "#,
-//     )
-//     .fetch_all(pool)
-//     .await?;
-//
-//     let confirmed_subscribers = rows
-//         .into_iter()
-//         .filter_map(|r| match SubscriberEmail::parse(r.email) {
-//             Ok(email) => Some(ConfirmedSubscriber { email }),
-//             Err(error) => {
-//                 tracing::warn!(
-//                     "A confirmed subscriber is using an invalid email addres.\n{}.",
-//                     error
-//                 );
-//                 None
-//             }
-//         })
-//         .collect();
-//
-//     Ok(confirmed_subscribers)
-// }
 
 #[derive(thiserror::Error)]
 pub enum PublishError {
