@@ -7,8 +7,8 @@ use actix_web::HttpResponse;
 use actix_web::ResponseError;
 use actix_web::{web, HttpRequest};
 use anyhow::Context;
+use argon2::{Argon2, Params, PasswordHash, PasswordVerifier, Version};
 use secrecy::{ExposeSecret, Secret};
-use sha3::Digest;
 use sqlx::PgPool;
 
 #[derive(serde::Deserialize)]
@@ -143,6 +143,47 @@ async fn validate_credentials(
     credentials: Credentials,
     pool: &PgPool,
 ) -> Result<uuid::Uuid, PublishError> {
+    let row: Option<_> = sqlx::query!(
+        r#"
+        SELECT user_id, password_hash
+        FROM users
+        WHERE username = $1"#,
+        credentials.username,
+    )
+    .fetch_optional(pool)
+    .await
+    .context("Failed to perform query to retrieve stored credentials")
+    .map_err(PublishError::UnexpectedError)?;
+
+    let (expected_password_hash, user_id) = match row {
+        Some(row) => (row.password_hash, row.user_id),
+        None => {
+            return Err(PublishError::AuthError(anyhow::anyhow!(
+                "Unknown username."
+            )));
+        }
+    };
+
+    let expected_password_hash = PasswordHash::new(&expected_password_hash)
+        .context("Failed to parse hash in PHC string format.")
+        .map_err(PublishError::UnexpectedError)?;
+
+    Argon2::default()
+        .verify_password(
+            credentials.password.expose_secret().as_bytes(),
+            &expected_password_hash,
+        )
+        .context("Invalid password")
+        .map_err(PublishError::AuthError)?;
+
+    Ok(user_id)
+}
+
+// Using sha256 without salting:
+/*async fn validate_credentials(
+    credentials: Credentials,
+    pool: &PgPool,
+) -> Result<uuid::Uuid, PublishError> {
     let password_hash = sha3::Sha3_256::digest(credentials.password.expose_secret().as_bytes());
     // User lowercase hexadecimal encoding:
     let password_hash = format!("{:x}", password_hash);
@@ -165,7 +206,7 @@ async fn validate_credentials(
         .map(|row| row.user_id)
         .ok_or_else(|| anyhow::anyhow!("Invalid username or password"))
         .map_err(PublishError::AuthError)
-}
+}*/
 
 // /////////////////////////////////////////////////////////////////////////////////////////////////
 // Errors
