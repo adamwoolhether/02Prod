@@ -85,16 +85,18 @@ async fn newsletters_are_delivered_to_confirmed_subscribers() {
         .await;
 
     // Act
-    let newsletter_request_body = serde_json::json!({ "title": "Newsletter title",
-    "content": {
-                 "text": "Newsletter body as plain text",
-                 "html": "<p>Newsletter body as HTML</p>",
-            }
+    let newsletter_request_body = serde_json::json!({
+        "title": "Newsletter title",
+        "content": {
+            "text": "Newsletter body as plain text",
+            "html": "<p>Newsletter body as HTML</p>",
+        }
     });
     let response = app.post_newsletters(newsletter_request_body).await;
 
     // Assert
     assert_eq!(response.status().as_u16(), 200);
+    // Mock verifies on Drop that we have sent the newsletter email
 }
 
 #[tokio::test]
