@@ -154,7 +154,7 @@ async fn validate_credentials(
     );
 
     if let Some((stored_user_id, stored_password_hash)) =
-        get_stored_credentials(&credentials.username, &pool)
+        get_stored_credentials(&credentials.username, pool)
             .await
             .map_err(PublishError::UnexpectedError)?
     {
@@ -250,7 +250,7 @@ async fn get_stored_credentials(
 
 #[derive(thiserror::Error)]
 pub enum PublishError {
-    #[error("Authentication failed.")]
+    #[error("Authentication failed")]
     AuthError(#[source] anyhow::Error),
     #[error(transparent)]
     UnexpectedError(#[from] anyhow::Error),
