@@ -115,7 +115,9 @@ pub async fn spawn_app() -> TestApp {
     let test_app = TestApp {
         address: format!("http://localhost:{}", application_port),
         port: application_port,
-        db_pool: get_connection_pool(&configuration.database),
+        db_pool: get_connection_pool(&configuration.database)
+            .await
+            .expect("Failed to connect to the database"),
         email_server,
         test_user: TestUser::generate(),
     };
