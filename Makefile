@@ -26,6 +26,8 @@ sub:
 ####################################################################
 # DB
 ####################################################################
+# sqlx migrate add create_users_table
+
 db-migrate:
 	SKIP_DOCKER=true scripts/init_db.sh
 db-init:
