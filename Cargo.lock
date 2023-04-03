@@ -30,7 +30,7 @@ dependencies = [
  "actix-service",
  "actix-utils",
  "ahash",
- "base64",
+ "base64 0.13.1",
  "bitflags",
  "brotli",
  "bytes",
@@ -315,6 +315,12 @@ name = "base64"
 version = "0.13.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "9e1b586273c5702936fe7b7d6896644d8be71e6314cfe09d3167c95f712589e8"
+
+[[package]]
+name = "base64"
+version = "0.21.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a4a4ddaa51a5bc52a6948f74c06d20aaaddb71924eab79b8c97a8c556e942d6a"
 
 [[package]]
 name = "base64ct"
@@ -981,7 +987,7 @@ checksum = "6e9b187a72d63adbfba487f48095306ac823049cb504ee195541e91c7775f5ad"
 dependencies = [
  "anyhow",
  "async-channel",
- "base64",
+ "base64 0.13.1",
  "futures-lite",
  "http",
  "infer",
@@ -1170,9 +1176,9 @@ checksum = "0717cef1bc8b636c6e1c1bbdefc09e6322da8a9321966e8928ef80d20f7f770f"
 
 [[package]]
 name = "linkify"
-version = "0.8.1"
+version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "28d9967eb7d0bc31c39c6f52e8fce42991c0cd1f7a2078326f0b7a399a584c8d"
+checksum = "96dd5884008358112bc66093362197c7248ece00d46624e2cf71e50029f8cff5"
 dependencies = [
  "memchr",
 ]
@@ -1629,7 +1635,7 @@ version = "0.11.11"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "b75aa69a3f06bbcc66ede33af2af253c6f7a86b1ca0033f60c580a27074fbf92"
 dependencies = [
- "base64",
+ "base64 0.13.1",
  "bytes",
  "encoding_rs",
  "futures-core",
@@ -1704,7 +1710,7 @@ version = "0.19.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "35edb675feee39aec9c99fa5ff985081995a06d594114ae14cbe797ad7b7a6d7"
 dependencies = [
- "base64",
+ "base64 0.13.1",
  "log",
  "ring",
  "sct 0.6.1",
@@ -1729,7 +1735,7 @@ version = "1.0.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "0864aeff53f8c05aa08d86e5ef839d3dfcf07aeba2db32f12db0ef716e87bd55"
 dependencies = [
- "base64",
+ "base64 0.13.1",
 ]
 
 [[package]]
@@ -1797,9 +1803,9 @@ dependencies = [
 
 [[package]]
 name = "serde-aux"
-version = "3.1.0"
+version = "4.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d0a77223b653fa95f3f9864f3eb25b93e4ed170687eb42d85b6b98af21d5e1de"
+checksum = "c599b3fd89a75e0c18d6d2be693ddb12cccaf771db4ff9e39097104808a014c0"
 dependencies = [
  "chrono",
  "serde 1.0.143",
@@ -1974,7 +1980,7 @@ checksum = "e48c61941ccf5ddcada342cd59e3e5173b007c509e1e8e990dafc830294d9dc5"
 dependencies = [
  "ahash",
  "atoi",
- "base64",
+ "base64 0.13.1",
  "bitflags",
  "byteorder",
  "bytes",
@@ -2014,7 +2020,7 @@ dependencies = [
  "thiserror",
  "tokio-stream",
  "url",
- "uuid",
+ "uuid 0.8.2",
  "webpki 0.21.4",
  "webpki-roots 0.21.1",
  "whoami",
@@ -2268,15 +2274,14 @@ dependencies = [
 
 [[package]]
 name = "tracing-actix-web"
-version = "0.5.1"
+version = "0.7.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "99bcebac55fba44eadf75a424ee403e756f9165596a613d125876388e5fb4c34"
+checksum = "a230d51c76e70c5ff8edae9085d7d7161803a871880406a6772639def50d059c"
 dependencies = [
  "actix-web",
  "pin-project",
  "tracing",
- "tracing-futures",
- "uuid",
+ "uuid 1.3.0",
 ]
 
 [[package]]
@@ -2315,16 +2320,6 @@ checksum = "5aeea4303076558a00714b823f9ad67d58a3bbda1df83d8827d21193156e22f7"
 dependencies = [
  "once_cell",
  "valuable",
-]
-
-[[package]]
-name = "tracing-futures"
-version = "0.2.5"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "97d095ae15e245a057c8e8451bab9b3ee1e1f68e9ba2b4fbc18d0ac5237835f2"
-dependencies = [
- "pin-project",
- "tracing",
 ]
 
 [[package]]
@@ -2430,10 +2425,19 @@ dependencies = [
 ]
 
 [[package]]
-name = "validator"
-version = "0.15.0"
+name = "uuid"
+version = "1.3.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f07b0a1390e01c0fc35ebb26b28ced33c9a3808f7f9fbe94d3cc01e233bfeed5"
+checksum = "1674845326ee10d37ca60470760d4288a6f80f304007d92e5c53bab78c9cfd79"
+dependencies = [
+ "getrandom 0.2.7",
+]
+
+[[package]]
+name = "validator"
+version = "0.16.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "32ad5bf234c7d3ad1042e5252b7eddb2c4669ee23f32c7dd0e9b7705f07ef591"
 dependencies = [
  "idna",
  "lazy_static",
@@ -2696,7 +2700,7 @@ checksum = "cc3c7b7557dbfdad6431b5a51196c9110cef9d83f6a9b26699f35cdc0ae113ec"
 dependencies = [
  "assert-json-diff",
  "async-trait",
- "base64",
+ "base64 0.13.1",
  "deadpool",
  "futures",
  "futures-timer",
@@ -2726,7 +2730,7 @@ dependencies = [
  "actix-web",
  "anyhow",
  "argon2",
- "base64",
+ "base64 0.21.0",
  "chrono",
  "claim",
  "config",
@@ -2750,7 +2754,7 @@ dependencies = [
  "tracing-log",
  "tracing-subscriber",
  "unicode-segmentation",
- "uuid",
+ "uuid 0.8.2",
  "validator",
  "wiremock",
 ]

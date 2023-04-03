@@ -9,6 +9,7 @@ use actix_web::ResponseError;
 use actix_web::{web, HttpRequest};
 use anyhow::Context;
 use argon2::{Argon2, PasswordHash, PasswordVerifier};
+use base64::Engine;
 use secrecy::{ExposeSecret, Secret};
 use sqlx::PgPool;
 
@@ -119,7 +120,8 @@ fn basic_authentication(headers: &HeaderMap) -> Result<Credentials, anyhow::Erro
     let base64encoded_segment = header_value
         .strip_prefix("Basic ")
         .context("The authorization scheme was not 'Basic'.")?;
-    let decoded_bytes = base64::decode_config(base64encoded_segment, base64::STANDARD)
+    let decoded_bytes = base64::engine::general_purpose::STANDARD
+        .decode(base64encoded_segment)
         .context("Failed to base64-decode 'Basic' credentials")?;
     let decoded_credentials = String::from_utf8(decoded_bytes)
         .context("The decoded credentials string is not balid UTF8")?;
