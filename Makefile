@@ -51,6 +51,9 @@ udeps:
 test-verbose:
 	TEST_LOG=true cargo test health_check_works
 
+run:
+	cargo watch -x check -x run
+
 ####################################################################
 # BUILD
 ####################################################################
