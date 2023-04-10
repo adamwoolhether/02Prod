@@ -1,8 +1,6 @@
-use actix_web::cookie::Cookie;
 use actix_web::error::InternalError;
-use actix_web::http::header::LOCATION;
-use actix_web::web;
-use actix_web::HttpResponse;
+use actix_web::{http::header::LOCATION, web, HttpResponse};
+use actix_web_flash_messages::FlashMessage;
 // use hmac::{Hmac, Mac};
 use secrecy::Secret;
 use sqlx::PgPool;
@@ -50,12 +48,12 @@ pub async fn login(
             //     mac.update(query_string.as_bytes());
             //     mac.finalize().into_bytes()
             // };
+            FlashMessage::error(e.to_string()).send(); // Set the cookie.
             let response = HttpResponse::SeeOther()
                 .insert_header((
                     LOCATION,
                     "/login", // format!("/login?{}&tag={:x}", query_string, hmac_tag),
                 ))
-                .cookie(Cookie::new("_flash", e.to_string())) // .insert_header(("Set-Cookie", format!("_flash={e}")))
                 .finish();
             Err(InternalError::from_response(e, response))
         }

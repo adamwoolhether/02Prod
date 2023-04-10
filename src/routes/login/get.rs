@@ -1,7 +1,11 @@
-use crate::startup::HmacSecret;
-use actix_web::{http::header::ContentType, HttpRequest, HttpResponse};
+use std::fmt::Write;
+
+use actix_web::{http::header::ContentType, HttpResponse};
+use actix_web_flash_messages::{IncomingFlashMessages, Level};
 use hmac::{Hmac, Mac};
 use secrecy::ExposeSecret;
+
+use crate::startup::HmacSecret;
 
 #[derive(serde::Deserialize)]
 pub struct QueryParams {
@@ -22,13 +26,12 @@ impl QueryParams {
     }
 }
 
-pub async fn login_form(request: HttpRequest) -> HttpResponse {
-    let error_html = match request.cookie("_flash") {
-        None => "".into(),
-        Some(cookie) => {
-            format!("<p><i>{}</i></p>", cookie.value())
-        }
-    };
+pub async fn login_form(flash_messages: IncomingFlashMessages) -> HttpResponse {
+    let mut error_html = String::new();
+
+    for m in flash_messages.iter().filter(|m| m.level() == Level::Error) {
+        writeln!(error_html, "<p><i>{}</i></p>", m.content()).unwrap();
+    }
     HttpResponse::Ok()
         .content_type(ContentType::html())
         .body(format!(
