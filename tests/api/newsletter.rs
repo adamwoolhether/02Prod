@@ -1,8 +1,8 @@
-use crate::helpers::{spawn_app, ConfirmationLinks, TestApp};
-use actix_web::HttpMessage;
 use uuid::Uuid;
 use wiremock::matchers::{any, method, path};
 use wiremock::{Mock, ResponseTemplate};
+
+use crate::helpers::{spawn_app, ConfirmationLinks, TestApp};
 
 #[tokio::test]
 async fn newsletters_are_not_delivered_to_unconfirmed_subscribers() {

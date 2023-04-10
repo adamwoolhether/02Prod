@@ -50,7 +50,7 @@ docker run --name zero2prod_dev \
   postgres -N 1000
 fi
 
-# Ping Postgres until it's ready to accempt commands.
+# Ping Postgres until it's ready to accept commands.
 export PGPASSWORD=${DB_PASSWORD}
 printf "Postgres is unavailable - sleeping"
 until psql -h "localhost" -U "${DB_USER}" -p "${DB_PORT}" -d "postgres" -c '\q' &> /dev/null ; do
