@@ -184,9 +184,9 @@ dependencies = [
 
 [[package]]
 name = "actix-web-flash-messages"
-version = "0.3.3"
+version = "0.4.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4c11707b0318fb0258259e518e0275783d1e947c24b6d5e8b2e8b69290b049d1"
+checksum = "300b8100fc09e9eb5036775f7d1e67f643c25fe6e796e7dbdeb8423c39482106"
 dependencies = [
  "actix-web",
  "anyhow",
