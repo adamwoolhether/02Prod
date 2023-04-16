@@ -25,6 +25,8 @@ shell := $(shell echo ${SHELL})
 sub:
 	curl -i -X POST -d 'email=thomas_mann@hotmail.com&name=Tom' http://127.0.0.1:8000/subscriptions
 
+up: db-init redis
+
 ####################################################################
 # DB
 ####################################################################
@@ -39,6 +41,10 @@ db-down:
 	docker rm zero2prod_dev
 pgcli:
 	pgcli postgres://postgres:password@localhost/newsletter
+
+redis:
+	scripts/init_redis.sh
+# Need to manuall create in digital ocean and set APP_REDIS_URI var from the app console
 
 ####################################################################
 # DEV
