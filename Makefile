@@ -26,6 +26,8 @@ sub:
 	curl -i -X POST -d 'email=thomas_mann@hotmail.com&name=Tom' http://127.0.0.1:8000/subscriptions
 
 up: db-init redis
+	ulimit -n 1024
+down: db-down redis-down
 
 ####################################################################
 # DB
@@ -42,9 +44,12 @@ db-down:
 pgcli:
 	pgcli postgres://postgres:password@localhost/newsletter
 
+# Need to manually create in digital ocean and set APP_REDIS_URI var from the app console
 redis:
 	scripts/init_redis.sh
-# Need to manuall create in digital ocean and set APP_REDIS_URI var from the app console
+redis-down:
+	docker stop zero2prod_dev_redis
+	docker rm zero2prod_dev_redis
 
 ####################################################################
 # DEV

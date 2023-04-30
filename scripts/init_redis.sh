@@ -1,5 +1,5 @@
 #! /usr/bin/env bash
-set -x
+#set -x
 set -eo pipefail
 
 # If redis container is running, print instructions to kill it and & exit.
@@ -13,7 +13,7 @@ fi
 # Launch Redis using Docker.
 docker run \
   -p "6379:6379" \
-  -d --name "redis_$(date '+%s')" \
+  -d --name zero2prod_dev_redis \
   redis:6
 
->&2 "Redis is ready to go!"
+>&2 echo "Redis is ready to go!"
