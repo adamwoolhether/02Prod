@@ -1,5 +1,5 @@
 // use hmac::{Hmac, Mac};
-use actix_session::Session;
+use crate::session_state::TypedSession;
 use actix_web::error::InternalError;
 use actix_web::{http::header::LOCATION, web, HttpResponse};
 use actix_web_flash_messages::FlashMessage;
@@ -20,7 +20,7 @@ pub async fn login(
     form: web::Form<FormData>,
     pool: web::Data<PgPool>,
     // secret: web::Data<HmacSecret>,
-    session: Session,
+    session: TypedSession,
 ) -> Result<HttpResponse, InternalError<LoginError>> {
     let credentials = Credentials {
         username: form.0.username,
@@ -35,7 +35,7 @@ pub async fn login(
                 .finish();
             session.renew(); // Rotate session token after login to prevent session attacks!
             session
-                .insert("user_id", user_id)
+                .insert_user_id(user_id)
                 .map_err(|e| login_redirect(LoginError::UnexpectedError(e.into())))?;
             Ok(HttpResponse::SeeOther()
                 .insert_header((LOCATION, "/admin/dashboard"))
