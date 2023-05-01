@@ -1,4 +1,3 @@
-use crate::session_state::TypedSession;
 use actix_session::Session;
 use actix_web::{
     http::header::ContentType,
@@ -8,13 +7,8 @@ use anyhow::Context;
 use sqlx::PgPool;
 use uuid::Uuid;
 
-// Return an opaque 500 while preserving the error's root cause for logging.
-fn e500<T>(e: T) -> actix_web::Error
-where
-    T: std::fmt::Debug + std::fmt::Display + 'static,
-{
-    actix_web::error::ErrorInternalServerError(e)
-}
+use crate::session_state::TypedSession;
+use crate::utils::e500;
 
 pub async fn admin_dashboard(
     session: TypedSession,
@@ -30,15 +24,19 @@ pub async fn admin_dashboard(
         .content_type(ContentType::html())
         .body(format!(
             r#"<!DOCTYPE html>
-    <html lang="en">
-    <head>
-    <meta http-equiv="content-type" content="text/html; charset=utf-8">
-    <title>Admin dashboard</title>
-</head>
-<body>
-    <p>Welcome {username}!</p>
-</body>
-</html>"#
+                <html lang="en">
+                <head>
+                    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+                    <title>Admin dashboard</title>
+                </head>
+                <body>
+                    <p>Welcome {username}!</p>
+                    <p>Available actions:</p>
+                    <ol>
+                        <li><a href="/admin/password">Change password</a></li>
+                    </ol>
+                </body>
+                </html>"#,
         )))
 }
 
