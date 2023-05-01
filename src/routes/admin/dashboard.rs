@@ -1,4 +1,3 @@
-use actix_session::Session;
 use actix_web::{
     http::header::ContentType,
     {web, HttpResponse},
